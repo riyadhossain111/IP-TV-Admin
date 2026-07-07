@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>অ্যাডমিন প্যানেল - RIYAD IP TV</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+        /* ===== অ্যাডমিন স্পেসিফিক স্টাইল ===== */
+        .admin-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background: var(--bg-secondary);
+            border-radius: 24px;
+            border: 1px solid var(--gold-glow);
+            box-shadow: var(--shadow);
+        }
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .admin-header h1 {
+            color: var(--gold);
+            font-size: 1.8rem;
+        }
+        .admin-header .ceo {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .admin-actions button {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+        .admin-actions button:hover {
+            background: var(--gold);
+            color: #000;
+            border-color: var(--gold);
+        }
+        .login-box {
+            max-width: 400px;
+            margin: 60px auto;
+        }
+        .login-box label {
+            display: block;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 60px;
+            border: none;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            outline: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        .login-box input:focus {
+            outline: 2px solid var(--gold);
+        }
+        .login-box .error-msg {
+            color: var(--danger);
+            display: none;
+            margin: 8px 0;
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            color: var(--text-secondary);
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 60px;
+            border: none;
+            background: var(--bg-input);
+            color: var(--text-primary);
+            outline: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: 2px solid var(--gold);
+        }
+        .row-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .row-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+        .btn-gold {
+            background: var(--gold);
+            color: #000;
+            font-weight: 700;
+            padding: 13px;
+            border: none;
+            border-radius: 60px;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+        .btn-gold:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+        .btn-dark {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 60px;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1rem;
+        }
+        .btn-dark:hover {
+            border-color: var(--gold);
+            background: var(--gold);
+            color: #000;
+        }
+        .btn-danger {
+            background: #441a1a;
+            color: var(--danger);
+            border-color: var(--danger);
+        }
+        .btn-danger:hover {
+            background: var(--danger);
+            color: #000;
+        }
+        .btn-sm {
+            padding: 8px 16px;
+            width: auto;
+            display: inline-block;
+            font-size: 0.85rem;
+        }
+        .btn-success {
+            background: #1a441a;
+            color: var(--success);
+            border-color: var(--success);
+        }
+        .btn-success:hover {
+            background: var(--success);
+            color: #000;
+        }
+        .drop-zone {
+            border: 2px dashed var(--gold);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: var(--text-secondary);
+            transition: 0.3s;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        .drop-zone.dragover {
+            background: var(--gold-glow);
+            border-color: var(--gold);
+        }
+        .drop-zone .icon {
+            font-size: 3rem;
+            display: block;
+        }
+        .m3u-files {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .m3u-file-item {
+            background: var(--bg-input);
+            padding: 6px 16px;
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.85rem;
+        }
+        .m3u-file-item .del-file-btn {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+        .channel-list {
+            max-height: 350px;
+            overflow-y: auto;
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+        }
+        .channel-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .channel-list::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 20px;
+        }
+        .ch-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            border-bottom: 1px solid var(--border-color);
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .ch-item:last-child {
+            border-bottom: none;
+        }
+        .ch-item .ch-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 150px;
+        }
+        .ch-item .ch-info .ch-icon {
+            font-size: 1.5rem;
+        }
+        .ch-item .ch-info .ch-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .ch-item .ch-info .ch-category {
+            background: var(--gold-glow);
+            color: var(--gold);
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 0.65rem;
+        }
+        .ch-item .ch-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .ch-item .ch-actions button {
+            background: var(--bg-input);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: 0.3s;
+        }
+        .ch-item .ch-actions .edit-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+        .ch-item .ch-actions .del-btn:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        .empty-msg {
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 20px;
+        }
+        .category-tag {
+            display: inline-block;
+            background: var(--gold-glow);
+            color: var(--gold);
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            margin: 3px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+        .category-tag:hover {
+            border-color: var(--gold);
+        }
+        .category-tag.active {
+            background: var(--gold);
+            color: #000;
+        }
+        .category-filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px 0;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .hidden {
+            display: none !important;
+        }
+        #toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 14px 28px;
+            border-radius: 16px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border: 1px solid var(--gold);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transform: translateX(120%);
+            transition: transform 0.5s ease;
+            z-index: 9999;
+            max-width: 400px;
+            font-weight: 600;
+        }
+        #toast.show {
+            transform: translateX(0);
+        }
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-box {
+            background: var(--bg-secondary);
+            border-radius: 32px;
+            padding: 30px;
+            max-width: 500px;
+            width: 92%;
+            border: 1px solid var(--gold-glow);
+        }
+        .modal-box h2 {
+            color: var(--gold);
+            margin-bottom: 16px;
+        }
+        .logo-preview {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border-radius: 16px;
+            margin: 8px 0;
+        }
+        .logo-preview img {
+            max-height: 50px;
+            border-radius: 8px;
+        }
+        @media (max-width: 600px) {
+            .row-2,
+            .row-3 {
+                grid-template-columns: 1fr;
+            }
+            .admin-container {
+                padding: 16px;
+            }
+            .ch-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .ch-item .ch-actions {
+                justify-content: center;
+            }
+        }
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toast"></div>
+
+    <div class="admin-container">
+
+        <!-- ===== অ্যাডমিন হেডার ===== -->
+        <div class="admin-header">
+            <div>
+                <h1>⚙️ অ্যাডমিন প্যানেল</h1>
+                <div class="ceo">👑 CEO: RIYAD HOSSAIN</div>
+            </div>
+            <div class="admin-actions">
+                <button onclick="toggleTheme()">🌓 থিম</button>
+                <button onclick="location.href='index.html'">🏠 মেইন</button>
+            </div>
+        </div>
+
+        <!-- ===== লগইন ===== -->
+        <div id="loginSection" class="login-box">
+            <label>🔑 পাসওয়ার্ড</label>
+            <input type="password" id="adminPass" placeholder="পাসওয়ার্ড লিখুন" />
+            <div class="error-msg" id="loginError">❌ ভুল পাসওয়ার্ড!</div>
+            <button class="btn-gold" onclick="loginAdmin()">🔓 প্রবেশ করুন</button>
+        </div>
+
+        <!-- ===== অ্যাডমিন কন্টেন্ট ===== -->
+        <div id="adminContent" class="hidden fade-in">
+
+            <!-- M3U আপলোড -->
+            <div class="form-group">
+                <label>📂 M3U ফাইল আপলোড</label>
+                <div class="drop-zone" id="dropZone">
+                    <span class="icon">📁</span>
+                    <p>এখানে ক্লিক করুন অথবা ফাইল ড্র্যাগ করুন</p>
+                    <p style="font-size:0.8rem;color:var(--text-secondary);">(.m3u / .m3u8)</p>
+                    <input type="file" id="m3uFileInput" accept=".m3u,.m3u8" style="display:none;" />
+                </div>
+                <button class="btn-gold" onclick="uploadM3U()">📤 আপলোড করুন</button>
+            </div>
+
+            <!-- M3U ফাইল লিস্ট -->
+            <div class="form-group">
+                <label>📋 আপলোড করা M3U ফাইল</label>
+                <div class="m3u-files" id="m3uFileList">
+                    <span class="empty-msg">কোনো ফাইল আপলোড করা হয়নি</span>
+                </div>
+            </div>
+
+            <hr style="border-color:var(--border-color);margin:20px 0;" />
+
+            <!-- ক্যাটাগরি ফিল্টার -->
+            <div class="form-group">
+                <label>📂 ক্যাটাগরি ফিল্টার</label>
+                <div class="category-filter-section" id="categoryFilterContainer">
+                    <span class="category-tag active" data-cat="All" onclick="filterByCategory('All')">📡 সব (0)</span>
+                </div>
+            </div>
+
+            <!-- চ্যানেল যোগ -->
+            <div class="form-group">
+                <label>➕ নতুন চ্যানেল যোগ</label>
+                <div class="row-2">
+                    <input type="text" id="newChName" placeholder="চ্যানেল নাম" />
+                    <input type="text" id="newChCategory" placeholder="ক্যাটাগরি" />
+                </div>
+                <input type="text" id="newChUrl" placeholder="URL" />
+                <input type="text" id="newChLogo" placeholder="লোগো ইমোজি (ঐচ্ছিক)" />
+                <button class="btn-gold" onclick="addChannel()">➕ চ্যানেল যোগ করুন</button>
+            </div>
+
+            <hr style="border-color:var(--border-color);margin:20px 0;" />
+
+            <!-- চ্যানেল লিস্ট -->
+            <div class="form-group">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+                    <label style="margin:0;">📋 চ্যানেল লিস্ট</label>
+                    <span style="background:var(--gold-glow);color:var(--gold);padding:4px 16px;border-radius:30px;font-size:0.8rem;" id="channelCountAdmin">০টি</span>
+                    <input type="text" id="adminSearch" placeholder="🔍 সার্চ..." oninput="renderAdminList()" style="flex:1;min-width:120px;padding:8px 16px;border-radius:40px;border:none;background:var(--bg-input);color:var(--text-primary);outline:1px solid var(--border-color);" />
+                    <button class="btn-sm btn-danger" onclick="bulkDelete()">🗑️ সব ডিলিট</button>
+                </div>
+                <div class="channel-list" id="adminChannelList">
+                    <div class="empty-msg">কোনো চ্যানেল নেই</div>
+                </div>
+            </div>
+
+            <hr style="border-color:var(--border-color);margin:20px 0;" />
+
+            <!-- অটো ক্যাটাগরি -->
+            <div class="form-group">
+                <label>🤖 অটো ক্যাটাগরি</label>
+                <div class="row-2">
+                    <button class="btn-dark btn-success" onclick="autoDetectCategories()">🤖 অটো ডিটেক্ট</button>
+                    <div style="display:flex;gap:10px;">
+                        <input type="text" id="assignCategoryName" placeholder="ক্যাটাগরি নাম" style="flex:1;" />
+                        <button class="btn-sm btn-gold" onclick="assignAllToCategory()" style="padding:8px 20px;">অ্যাসাইন</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ব্যাকআপ / রিস্টোর / এক্সপোর্ট -->
+            <div class="form-group">
+                <label>💾 ব্যাকআপ ও রিস্টোর</label>
+                <div class="row-3">
+                    <button class="btn-dark" onclick="backupChannels()">💾 ব্যাকআপ</button>
+                    <button class="btn-dark" onclick="document.getElementById('restoreInput').click()">📂 রিস্টোর</button>
+                    <button class="btn-dark" onclick="exportChannels()">📤 এক্সপোর্ট</button>
+                    <input type="file" id="restoreInput" accept=".json" style="display:none;" onchange="restoreChannels(event)" />
+                </div>
+            </div>
+
+            <!-- রিসেট -->
+            <button class="btn-dark btn-danger" onclick="resetChannels()">🗑️ সব চ্যানেল রিসেট</button>
+
+            <hr style="border-color:var(--border-color);margin:20px 0;" />
+
+            <!-- লোগো পরিবর্তন -->
+            <div class="form-group">
+                <label>🖼️ লোগো পরিবর্তন (URL)</label>
+                <div class="logo-preview" id="logoPreview">
+                    <span>📺</span>
+                    <span style="color:var(--text-secondary);font-size:0.85rem;">বর্তমান লোগো</span>
+                </div>
+                <input type="text" id="logoUrl" placeholder="https://example.com/logo.png" />
+                <button class="btn-dark" onclick="changeLogo()">🔄 লোগো আপডেট</button>
+            </div>
+
+            <hr style="border-color:var(--border-color);margin:20px 0;" />
+
+            <!-- সেটিংস -->
+            <div class="form-group">
+                <label>⚙️ সেটিংস</label>
+                <div class="row-2">
+                    <button class="btn-dark" onclick="clearAllData()">🗑️ সব ডাটা ক্লিয়ার</button>
+                    <button class="btn-dark" onclick="exportAllData()">📦 সব ডাটা এক্সপোর্ট</button>
+                </div>
+            </div>
+
+            <a href="index.html" class="btn-dark" style="display:block;text-align:center;text-decoration:none;margin-top:12px;">
+                ⬅️ মেইন পেজে ফিরে যান
+            </a>
+        </div>
+    </div>
+
+    <!-- ===== এডিট মোডাল ===== -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <h2>✏️ চ্যানেল এডিট</h2>
+            <div class="form-group">
+                <label>নাম</label>
+                <input type="text" id="editChName" />
+            </div>
+            <div class="form-group">
+                <label>ক্যাটাগরি</label>
+                <input type="text" id="editChCategory" />
+            </div>
+            <div class="form-group">
+                <label>URL</label>
+                <input type="text" id="editChUrl" />
+            </div>
+            <div class="form-group">
+                <label>লোগো</label>
+                <input type="text" id="editChLogo" />
+            </div>
+            <button class="btn-gold" onclick="saveEdit()">💾 সেভ করুন</button>
+            <button class="btn-dark" onclick="closeEdit()">✖ বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <script>
+        // ================================================================
+        //  অ্যাডমিন জাভাস্ক্রিপ্ট (ফিক্সড)
+        // ================================================================
+
+        const ADMIN_PASSWORD = "RIYAD HOSSAIN";
+        let channels = [];
+        let editIndex = -1;
+        let m3uFiles = JSON.parse(localStorage.getItem('riyadM3uFiles') || '[]');
+        let currentCategoryFilter = 'All';
+
+        // ===== টোস্ট =====
+        function showToast(msg, type = 'success') {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = type;
+            t.classList.add('show');
+            clearTimeout(t._timeout);
+            t._timeout = setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        // ===== থিম =====
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            localStorage.setItem('riyadTheme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+            showToast('🌓 থিম পরিবর্তন');
+        }
+        if (localStorage.getItem('riyadTheme') === 'light') {
+            document.body.classList.add('light-theme');
+        }
+
+        // ===== লগইন =====
+        function loginAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            if (pass === ADMIN_PASSWORD) {
+                document.getElementById('loginError').style.display = 'none';
+                document.getElementById('loginSection').style.display = 'none';
+                document.getElementById('adminContent').classList.remove('hidden');
+                loadChannels();
+                loadM3uFiles();
+                loadLogoPreview();
+                updateCategoryFilter();
+                showToast('🔓 স্বাগতম!');
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+                showToast('❌ ভুল পাসওয়ার্ড!', 'error');
+            }
+        }
+        document.getElementById('adminPass').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') loginAdmin();
+        });
+
+        // ===== চ্যানেল লোড =====
+        function loadChannels() {
+            const saved = localStorage.getItem('riyadChannels');
+            if (saved) {
+                try { channels = JSON.parse(saved); } catch (e) { channels = []; }
+            }
+            renderAdminList();
+            updateCategoryFilter();
+            // মেইন পেজে ডেটা পাঠানোর জন্য স্টোরেজ ইভেন্ট
+            window.dispatchEvent(new Event('storage'));
+        }
+
+        function getCategories() {
+            const cats = new Set();
+            channels.forEach(ch => {
+                if (ch.category) cats.add(ch.category);
+            });
+            return Array.from(cats);
+        }
+
+        function updateCategoryFilter() {
+            const container = document.getElementById('categoryFilterContainer');
+            const cats = getCategories();
+            let html =
+                `<span class="category-tag active" data-cat="All" onclick="filterByCategory('All')">📡 সব (${channels.length})</span>`;
+            cats.forEach(cat => {
+                const count = channels.filter(ch => ch.category === cat).length;
+                html +=
+                    `<span class="category-tag" data-cat="${cat}" onclick="filterByCategory('${cat}')">📂 ${cat} (${count})</span>`;
+            });
+            container.innerHTML = html;
+            document.querySelectorAll('.category-tag').forEach(el => {
+                el.classList.toggle('active', el.dataset.cat === currentCategoryFilter);
+            });
+        }
+
+        function filterByCategory(cat) {
+            currentCategoryFilter = cat;
+            document.querySelectorAll('.category-tag').forEach(el => {
+                el.classList.toggle('active', el.dataset.cat === cat);
+            });
+            renderAdminList();
+        }
+
+        function renderAdminList() {
+            const container = document.getElementById('adminChannelList');
+            const count = document.getElementById('channelCountAdmin');
+            const search = document.getElementById('adminSearch').value.toLowerCase();
+
+            let filtered = channels;
+            if (currentCategoryFilter !== 'All') {
+                filtered = filtered.filter(ch => ch.category === currentCategoryFilter);
+            }
+            if (search) {
+                filtered = filtered.filter(ch => ch.name.toLowerCase().includes(search) ||
+                    (ch.category && ch.category.toLowerCase().includes(search)));
+            }
+
+            if (!filtered.length) {
+                container.innerHTML = '<div class="empty-msg">❌ কোনো চ্যানেল নেই</div>';
+                count.textContent = '০টি';
+                return;
+            }
+
+            container.innerHTML = '';
+            filtered.forEach((ch, idx) => {
+                const realIdx = channels.indexOf(ch);
+                const div = document.createElement('div');
+                div.className = 'ch-item fade-in';
+                div.innerHTML = `
+                    <div class="ch-info">
+                        <span class="ch-icon">${ch.logo || '📡'}</span>
+                        <div>
+                            <div class="ch-name">${ch.name}</div>
+                            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                                ${ch.category ? `<span class="ch-category">📂 ${ch.category}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ch-actions">
+                        <button class="edit-btn" onclick="openEdit(${realIdx})">✏️</button>
+                        <button class="del-btn" onclick="deleteChannel(${realIdx})">🗑️</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+            count.textContent = filtered.length + 'টি';
+        }
+
+        // ===== M3U পার্স =====
+        function parseM3U(data) {
+            const lines = data.split(/\r?\n/);
+            const result = [];
+            let current = null;
+            for (let line of lines) {
+                line = line.trim();
+                if (line.startsWith('#EXTINF:')) {
+                    const nameMatch = line.split(',');
+                    let name = nameMatch.length > 1 ? nameMatch.slice(1).join(',') : 'অজানা';
+                    const logoMatch = line.match(/tvg-logo="([^"]*)"/);
+                    const logo = logoMatch ? logoMatch[1] : '📡';
+                    const groupMatch = line.match(/group-title="([^"]*)"/);
+                    const category = groupMatch ? groupMatch[1] : '';
+                    current = { name: name.trim(), logo: logo, url: '', category: category };
+                } else if (line && !line.startsWith('#') && current) {
+                    current.url = line;
+                    if (current.url) result.push(current);
+                    current = null;
+                }
+            }
+            return result;
+        }
+
+        // ===== M3U আপলোড =====
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('m3uFileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault();
+            dropZone.classList.add('dragover'); });
+        dropZone.addEventListener('dragleave', () => { dropZone.classList.remove('dragover'); });
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length) {
+                fileInput.files = files;
+                uploadM3U();
+            }
+        });
+        fileInput.addEventListener('change', () => { if (fileInput.files.length) uploadM3U(); });
+
+        function uploadM3U() {
+            const file = fileInput.files[0];
+            if (!file) {
+                showToast('📂 ফাইল সিলেক্ট করুন', 'error');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const parsed = parseM3U(e.target.result);
+                if (parsed.length) {
+                    const fileName = file.name;
+                    if (!m3uFiles.includes(fileName)) {
+                        m3uFiles.push(fileName);
+                        localStorage.setItem('riyadM3uFiles', JSON.stringify(m3uFiles));
+                    }
+                    if (channels.length > 0) {
+                        if (confirm('বর্তমান চ্যানেলের সাথে মার্জ করবেন? (না দিলে রিপ্লেস হবে)')) {
+                            channels = channels.concat(parsed);
+                        } else {
+                            channels = parsed;
+                        }
+                    } else {
+                        channels = parsed;
+                    }
+                    saveAndRefresh();
+                    loadM3uFiles();
+                    updateCategoryFilter();
+                    showToast('✅ ' + channels.length + ' টি চ্যানেল লোড হয়েছে!');
+                } else {
+                    showToast('❌ কোনো চ্যানেল পাওয়া যায়নি', 'error');
+                }
+            };
+            reader.readAsText(file);
+            fileInput.value = '';
+        }
+
+        // ===== M3U ফাইল লিস্ট =====
+        function loadM3uFiles() {
+            const container = document.getElementById('m3uFileList');
+            if (!m3uFiles.length) {
+                container.innerHTML = '<span class="empty-msg">কোনো ফাইল আপলোড করা হয়নি</span>';
+                return;
+            }
+            container.innerHTML = '';
+            m3uFiles.forEach((f, i) => {
+                const div = document.createElement('div');
+                div.className = 'm3u-file-item';
+                div.innerHTML = `
+                    📄 ${f}
+                    <button class="del-file-btn" onclick="deleteM3uFile(${i})" title="ডিলিট">✖</button>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function deleteM3uFile(index) {
+            if (confirm('"' + m3uFiles[index] + '" ফাইলটি ডিলিট করবেন?')) {
+                m3uFiles.splice(index, 1);
+                localStorage.setItem('riyadM3uFiles', JSON.stringify(m3uFiles));
+                loadM3uFiles();
+                showToast('🗑️ ফাইল ডিলিট হয়েছে');
+            }
+        }
+
+        // ===== অটো ক্যাটাগরি =====
+        function autoDetectCategories() {
+            if (!channels.length) {
+                showToast('⚠️ কোনো চ্যানেল নেই', 'error');
+                return;
+            }
+
+            let detected = 0;
+            const keywords = {
+                'Bangla': ['bangla', 'bn', 'বাংলা'],
+                'News': ['news', 'cnn', 'bbc', 'skyn', 'aljazeera', 'নিউজ', 'সংবাদ'],
+                'Sports': ['sport', 'football', 'cricket', 'tennis', 'espn', 'স্পোর্টস', 'খেলা', 'fifa'],
+                'Movies': ['movie', 'film', 'cinema', 'hollywood', 'bollywood', 'সিনেমা', 'চলচ্চিত্র'],
+                'Music': ['music', 'mtv', 'vh1', 'সঙ্গীত', 'মিউজিক'],
+                'Documentary': ['documentary', 'nat geo', 'discovery', 'history', 'ডকুমেন্টারি'],
+                'Kids': ['kids', 'cartoon', 'disney', 'nickelodeon', 'শিশু', 'কার্টুন'],
+                'Religious': ['islam', 'quran', 'religious', 'ধর্ম', 'মসজিদ'],
+                'Entertainment': ['entertainment', 'comedy', 'reality', 'এন্টারটেইনমেন্ট'],
+                'Hindi': ['hindi', 'bollywood', 'হিন্দি'],
+                'English': ['english', 'uk', 'usa', 'ইংরেজি'],
+                'Urdu': ['urdu', 'উর্দু'],
+                'Weather': ['weather', 'আবহাওয়া'],
+                'Drama': ['drama', 'নাটক'],
+                'Infotainment': ['infotainment', 'তথ্য']
+            };
+
+            channels.forEach(ch => {
+                if (ch.category && ch.category.trim() !== '') return;
+                const nameLower = ch.name.toLowerCase();
+                let matched = false;
+                for (const [cat, words] of Object.entries(keywords)) {
+                    for (const word of words) {
+                        if (nameLower.includes(word)) {
+                            ch.category = cat;
+                            matched = true;
+                            detected++;
+                            break;
+                        }
+                    }
+                    if (matched) break;
+                }
+                if (!matched) {
+                    ch.category = 'Channels';
+                    detected++;
+                }
+            });
+
+            saveAndRefresh();
+            updateCategoryFilter();
+            showToast('🤖 ' + detected + ' টি চ্যানেলে ক্যাটাগরি অ্যাসাইন হয়েছে!');
+        }
+
+        // ===== সব চ্যানেলকে একটি ক্যাটাগরিতে অ্যাসাইন =====
+        function assignAllToCategory() {
+            const catName = document.getElementById('assignCategoryName').value.trim();
+            if (!catName) {
+                showToast('⚠️ ক্যাটাগরি নাম দিন', 'error');
+                return;
+            }
+            if (!channels.length) {
+                showToast('⚠️ কোনো চ্যানেল নেই', 'error');
+                return;
+            }
+            channels.forEach(ch => { ch.category = catName; });
+            saveAndRefresh();
+            updateCategoryFilter();
+            document.getElementById('assignCategoryName').value = '';
+            showToast('✅ সব চ্যানেলকে "' + catName + '" ক্যাটাগরিতে অ্যাসাইন করা হয়েছে');
+        }
+
+        // ===== চ্যানেল যোগ =====
+        function addChannel() {
+            const name = document.getElementById('newChName').value.trim();
+            const url = document.getElementById('newChUrl').value.trim();
+            const category = document.getElementById('newChCategory').value.trim() || 'Channels';
+            const logo = document.getElementById('newChLogo').value.trim() || '📡';
+            if (!name || !url) {
+                showToast('⚠️ নাম এবং URL দিন', 'error');
+                return;
+            }
+            channels.push({ name, logo, url, category });
+            saveAndRefresh();
+            document.getElementById('newChName').value = '';
+            document.getElementById('newChUrl').value = '';
+            document.getElementById('newChCategory').value = '';
+            document.getElementById('newChLogo').value = '';
+            updateCategoryFilter();
+            showToast('✅ "' + name + '" যোগ হয়েছে');
+        }
+
+        // ===== চ্যানেল ডিলিট =====
+        function deleteChannel(index) {
+            if (confirm('"' + channels[index].name + '" ডিলিট করবেন?')) {
+                channels.splice(index, 1);
+                saveAndRefresh();
+                updateCategoryFilter();
+                showToast('🗑️ ডিলিট হয়েছে');
+            }
+        }
+
+        function bulkDelete() {
+            if (!channels.length) {
+                showToast('❌ কোনো চ্যানেল নেই', 'error');
+                return;
+            }
+            if (confirm('সব চ্যানেল ডিলিট করবেন? (' + channels.length + ' টি)')) {
+                channels = [];
+                saveAndRefresh();
+                updateCategoryFilter();
+                showToast('🗑️ সব চ্যানেল ডিলিট হয়েছে');
+            }
+        }
+
+        // ===== এডিট =====
+        function openEdit(index) {
+            editIndex = index;
+            const ch = channels[index];
+            document.getElementById('editChName').value = ch.name;
+            document.getElementById('editChUrl').value = ch.url || '';
+            document.getElementById('editChCategory').value = ch.category || '';
+            document.getElementById('editChLogo').value = ch.logo || '📡';
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeEdit() {
+            document.getElementById('editModal').classList.remove('show');
+            editIndex = -1;
+        }
+
+        function saveEdit() {
+            if (editIndex < 0 || editIndex >= channels.length) return;
+            const name = document.getElementById('editChName').value.trim();
+            const url = document.getElementById('editChUrl').value.trim();
+            const category = document.getElementById('editChCategory').value.trim() || 'Channels';
+            const logo = document.getElementById('editChLogo').value.trim() || '📡';
+            if (!name || !url) {
+                showToast('⚠️ নাম এবং URL দিন', 'error');
+                return;
+            }
+            channels[editIndex] = { name, logo, url, category };
+            saveAndRefresh();
+            closeEdit();
+            updateCategoryFilter();
+            showToast('✅ আপডেট হয়েছে');
+        }
+
+        // ===== রিসেট =====
+        function resetChannels() {
+            if (confirm('⚠️ সব চ্যানেল মুছে যাবে! নিশ্চিত?')) {
+                channels = [];
+                m3uFiles = [];
+                localStorage.setItem('riyadM3uFiles', JSON.stringify(m3uFiles));
+                saveAndRefresh();
+                loadM3uFiles();
+                updateCategoryFilter();
+                showToast('✅ সব রিসেট');
+            }
+        }
+
+        // ===== ব্যাকআপ =====
+        function backupChannels() {
+            if (!channels.length) {
+                showToast('⚠️ কোনো চ্যানেল নেই', 'error');
+                return;
+            }
+            const data = JSON.stringify(channels, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'riyad_channels_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            showToast('💾 ব্যাকআপ সেভ হয়েছে');
+        }
+
+        // ===== রিস্টোর =====
+        function restoreChannels(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data) && data.length) {
+                        channels = data;
+                        saveAndRefresh();
+                        updateCategoryFilter();
+                        showToast('✅ ' + channels.length + ' টি চ্যানেল রিস্টোর');
+                    } else {
+                        showToast('❌ ভুল ফাইল', 'error');
+                    }
+                } catch (err) {
+                    showToast('❌ ভুল ফাইল ফরম্যাট', 'error');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ===== এক্সপোর্ট =====
+        function exportChannels() {
+            if (!channels.length) {
+                showToast('⚠️ কোনো চ্যানেল নেই', 'error');
+                return;
+            }
+            let m3u = '#EXTM3U\n';
+            channels.forEach(ch => {
+                const catAttr = ch.category ? ` group-title="${ch.category}"` : '';
+                m3u += '#EXTINF:-1 tvg-logo="' + (ch.logo || '') + '"' + catAttr + ',' + ch.name + '\n';
+                m3u += ch.url + '\n';
+            });
+            const blob = new Blob([m3u], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'riyad_export_' + new Date().toISOString().slice(0, 10) + '.m3u';
+            a.click();
+            showToast('📤 এক্সপোর্ট হয়েছে');
+        }
+
+        // ===== লোগো =====
+        function loadLogoPreview() {
+            const saved = localStorage.getItem('riyadLogo');
+            const preview = document.getElementById('logoPreview');
+            if (saved) {
+                preview.innerHTML = `<img src="${saved}" style="max-height:50px;border-radius:8px;" />`;
+            } else {
+                preview.innerHTML = `<span>📺</span><span style="color:var(--text-secondary);font-size:0.85rem;">বর্তমান লোগো</span>`;
+            }
+        }
+
+        function changeLogo() {
+            const url = document.getElementById('logoUrl').value.trim();
+            if (!url) {
+                showToast('⚠️ URL দিন', 'error');
+                return;
+            }
+            localStorage.setItem('riyadLogo', url);
+            loadLogoPreview();
+            document.getElementById('logoUrl').value = '';
+            showToast('✅ লোগো আপডেট হয়েছে');
+        }
+
+        // ===== ডাটা ক্লিয়ার =====
+        function clearAllData() {
+            if (confirm('⚠️ সব ডাটা মুছে যাবে! নিশ্চিত?')) {
+                localStorage.clear();
+                channels = [];
+                m3uFiles = [];
+                renderAdminList();
+                loadM3uFiles();
+                updateCategoryFilter();
+                showToast('🗑️ সব ডাটা ক্লিয়ার');
+                setTimeout(() => location.reload(), 1000);
+            }
+        }
+
+        function exportAllData() {
+            const data = {
+                channels: channels,
+                m3uFiles: m3uFiles,
+                favorites: JSON.parse(localStorage.getItem('riyadFavs') || '[]'),
+                logo: localStorage.getItem('riyadLogo') || '',
+                exportedAt: new Date().toISOString(),
+                version: '2.0',
+                ceo: 'RIYAD HOSSAIN'
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'riyad_full_backup_' + new Date().toISOString().slice(0, 10) + '.json';
+            a.click();
+            showToast('📦 সব ডাটা এক্সপোর্ট হয়েছে');
+        }
+
+        // ===== হেল্পার =====
+        function saveAndRefresh() {
+            localStorage.setItem('riyadChannels', JSON.stringify(channels));
+            renderAdminList();
+            window.dispatchEvent(new Event('storage'));
+        }
+
+        // ===== মোডাল বন্ধ =====
+        document.getElementById('editModal').addEventListener('click', function(e) {
+            if (e.target === this) closeEdit();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeEdit();
+        });
+    </script>
+
+</body>
+</html>
